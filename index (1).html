@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Скачать игру</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#080b12;color:#fff;font-family:Arial,sans-serif;padding:20px}
+.card{width:min(440px,100%);background:linear-gradient(145deg,#141c2b,#0d121d);border:1px solid #25334b;border-radius:24px;padding:30px;text-align:center;box-shadow:0 20px 60px #0008}
+.logo{width:82px;height:82px;border-radius:22px;background:linear-gradient(135deg,#1686ff,#604bff);display:grid;place-items:center;font-size:35px;margin:0 auto 18px}
+h1{margin:0 0 10px;font-size:26px}p{color:#a9b7ca;line-height:1.5;margin:0 0 24px}
+button{border:0;border-radius:14px;padding:16px 20px;width:100%;font-weight:bold;font-size:17px;color:#fff;background:linear-gradient(90deg,#087cff,#5145ff);cursor:pointer;box-shadow:0 8px 25px #1478ff40}
+button:disabled{opacity:.75;cursor:wait}
+.progress-wrap{height:8px;background:#263246;border-radius:99px;overflow:hidden;margin:18px 0 10px;display:none}
+.progress{height:100%;width:0;background:linear-gradient(90deg,#19a4ff,#7461ff);transition:width .1s linear}
+.status{min-height:22px;color:#a9b7ca;font-size:14px}
+.meta{margin-top:22px;font-size:12px;color:#75849b}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">🎮</div>
+  <h1>Скачать игру</h1>
+  <p>Нажми кнопку ниже. Подготовка загрузки займёт 5 секунд.</p>
+  <button id="downloadBtn">⬇ Скачать игру</button>
+  <div class="progress-wrap" id="progressWrap"><div class="progress" id="progress"></div></div>
+  <div class="status" id="status"></div>
+  <div class="meta">Android • APK</div>
+</div>
+<script>
+const btn=document.getElementById('downloadBtn'),wrap=document.getElementById('progressWrap'),bar=document.getElementById('progress'),status=document.getElementById('status');
+btn.addEventListener('click',()=>{
+  if(btn.disabled)return;
+  btn.disabled=true;btn.textContent='Подготовка...';wrap.style.display='block';
+  let elapsed=0;
+  const timer=setInterval(()=>{
+    elapsed+=100;bar.style.width=Math.min(100,elapsed/5000*100)+'%';
+    status.textContent='Загрузка подготовится через '+Math.ceil((5000-elapsed)/1000)+' сек.';
+    if(elapsed>=5000){
+      clearInterval(timer);status.textContent='Готово! Начинается скачивание.';
+      const a=document.createElement('a');a.href='./base.apk';a.download='game.apk';document.body.appendChild(a);a.click();a.remove();
+      btn.disabled=false;btn.textContent='⬇ Скачать снова';
+    }
+  },100);
+});
+</script>
+</body>
+</html>
